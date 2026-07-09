@@ -11,6 +11,12 @@ END {
             }
         }
 
+        # we're done pruning leaves
+        if (k+1 == length(leafs)) {
+            workers += k+1
+            break
+        }
+
         split("", leafs, "")
         for (i = length(copy) - 1; i >= 0; i--) {
             leafs[length(copy) - i - 1] = copy[i]
