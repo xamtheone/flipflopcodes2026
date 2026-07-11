@@ -15,12 +15,10 @@ BEGIN {
             startx = i
         }
         else if ($i ~ /[a-z]/) {
-            # btinputs[NR][i] = $i
             btinputs[$i]["y"] = NR
             btinputs[$i]["x"] = i
         }
         else if ($i ~ /[A-Z]/) {
-            # btoutputs[NR][i] = $i
             btoutputs[$i]["y"] = NR
             btoutputs[$i]["x"] = i
         }
@@ -57,7 +55,7 @@ END {
                 break
             }
         }
-        print btoutput, boy, box, output
+
         if (output != "") {
             for (d in dirs) {
                 x = dirs[d]["x"] + box
@@ -106,14 +104,10 @@ END {
     print bin2int(bin)
 }
 
-function bin2int(b,
-    a, i, v) {
-    split(b, a, "")
-    for (i = 0; i < length(b); i++) {
-        v += 2**(length(b) -1 - i) * a[i+1]
-    }
-
-    return v
+function bin2int(b) {
+    "echo 'ibase=2; " b "' | bc" | getline decimal
+    close(cmd)
+    return decimal
 }
 
 function rotate_gears(startx, starty, start_gear,
