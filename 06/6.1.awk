@@ -85,12 +85,8 @@ END {
     print bin2int(bin)
 }
 
-function bin2int(b,
-    a, i, v) {
-    split(b, a, "")
-    for (i = 0; i < length(b); i++) {
-        v += 2**(length(b) -1 - i) * a[i+1]
-    }
-
-    return v
+function bin2int(b) {
+    "echo 'ibase=2; " b "' | bc" | getline decimal
+    close(cmd)
+    return decimal
 }
