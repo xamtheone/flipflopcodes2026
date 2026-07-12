@@ -43,8 +43,6 @@ END {
             snake[s]["x"] = px
             s++
         }
-
-        if (eaten == length(sushis)) break
     }
 
     print eaten_self * s
