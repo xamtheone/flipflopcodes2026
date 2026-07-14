@@ -1,0 +1,99 @@
+BEGIN { FS = "" }
+{
+    for (i = 1; i <= NF; i++) {
+        if ($i == "#") {
+            walls[NR][i] = $i
+        }
+        else if ($i == "S") {
+            starty = NR
+            startx = i
+        }
+        else if ($i == "E") {
+            exity = NR
+            exitx = i
+        }
+    }
+}
+END {
+    dirs["UP"]["y"] = -1
+    dirs["RIGHT"]["x"] = 1
+    dirs["DOWN"]["y"] = 1
+    dirs["LEFT"]["x"] = -1
+
+    qs = 0
+    qe = 0
+    q[0]["y"] = starty
+    q[0]["x"] = startx
+    q[0]["length"] = 0
+    q[0]["last_dir"] = ""
+    q[0]["walked"] = 1
+
+    while(length(q)) {
+        ny = q[qs]["y"]
+        nx = q[qs]["x"]
+        l = q[qs]["length"]
+        last_dir = q[qs]["last_dir"]
+        next_to_portal = q[qs]["next_to_portal"]
+        
+        delete q[qs]
+        qs++
+
+        if (ny == exity && nx == exitx) {
+            # example: 19
+            # example p3: 9
+            print l
+            break
+        }
+
+        next_to_wall = 0
+        for (d in dirs) {
+            x = dirs[d]["x"] + nx
+            y = dirs[d]["y"] + ny
+            if (walls[y][x] == "#") {
+                next_to_wall = 1
+                break
+            }
+        }
+        
+        for (d in dirs) {
+            # Use a portal first when next to a wall
+            if (next_to_wall) {
+                x = nx
+                y = ny
+                
+                while (walls[y + dirs[d]["y"]][x + dirs[d]["x"]] != "#") {
+                    x += dirs[d]["x"]
+                    y += dirs[d]["y"]
+                }
+
+                action_steps = next_to_portal ? 2 : 3
+
+                # Make sure we didn't visit this spot before adding to the queue
+                if ((abs(x - nx) > action_steps - 1 || abs(y - ny) > action_steps - 1) && visited[x,y] == "") {
+                    q[++qe]["y"] = y
+                    q[qe]["x"] = x
+                    q[qe]["length"] = l + action_steps
+                    q[qe]["last_dir"] = d
+                    q[qe]["next_to_portal"] = 1
+                    visited[x,y] = 1
+                }
+            }
+
+            # Then walk
+            x = dirs[d]["x"] + nx
+            y = dirs[d]["y"] + ny
+
+            if (walls[y][x] != "#" && visited[x,y] == "") {
+                q[++qe]["y"] = y
+                q[qe]["x"] = x
+                q[qe]["length"] = l + 1
+                q[qe]["last_dir"] = d
+                visited[x,y] = 1
+            }
+        }
+    }
+}
+
+function abs(n) {
+    return n < 0 ? -n : n
+}
