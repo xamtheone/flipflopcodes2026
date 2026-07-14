@@ -35,6 +35,12 @@ END {
         l = q[qs]["length"]
         last_dir = q[qs]["last_dir"]
         next_to_portal = q[qs]["next_to_portal"]
+        split("", ancestors, "")
+        for (a = 0; a < length(q[qs]["ancestors"]); a++) {
+            ancestors[a]["x"] = q[qs]["ancestors"][a]["x"]
+            ancestors[a]["y"] = q[qs]["ancestors"][a]["y"]
+            ancestors[a]["steps"] = q[qs]["ancestors"][a]["steps"]
+        }
         
         delete q[qs]
         qs++
@@ -76,6 +82,18 @@ END {
                     q[qe]["length"] = l + action_steps
                     q[qe]["last_dir"] = d
                     q[qe]["next_to_portal"] = 1
+                    q[qe]["steps"] = action_steps
+
+                    for (a = 0; a < length(ancestors); a++) {
+                        q[qe]["ancestors"][a]["x"] = ancestors[a]["x"]
+                        q[qe]["ancestors"][a]["y"] = ancestors[a]["y"]
+                        q[qe]["ancestors"][a]["steps"] = ancestors[a]["steps"]
+                    }
+
+                    q[qe]["ancestors"][a]["x"] = nx
+                    q[qe]["ancestors"][a]["y"] = ny
+                    q[qe]["ancestors"][a]["steps"] = action_steps
+                    
                     visited[x,y] = 1
                 }
             }
@@ -89,10 +107,28 @@ END {
                 q[qe]["x"] = x
                 q[qe]["length"] = l + 1
                 q[qe]["last_dir"] = d
+                q[qe]["steps"] = 1
+
+
+                for (a = 0; a < length(ancestors); a++) {
+                    q[qe]["ancestors"][a]["x"] = ancestors[a]["x"]
+                    q[qe]["ancestors"][a]["y"] = ancestors[a]["y"]
+                    q[qe]["ancestors"][a]["steps"] = ancestors[a]["steps"]
+                }
+
+                q[qe]["ancestors"][a]["x"] = nx
+                q[qe]["ancestors"][a]["y"] = ny
+                q[qe]["ancestors"][a]["steps"] = 1
+                
                 visited[x,y] = 1
             }
         }
     }
+
+    for (a = 0; a < length(ancestors); a++) {
+        print ancestors[a]["y"], ancestors[a]["x"], "steps:", ancestors[a]["steps"]
+    }
+    print exity, exitx
 }
 
 function abs(n) {
