@@ -27,6 +27,7 @@ END {
     q[0]["length"] = 0
     q[0]["last_dir"] = ""
     q[0]["walked"] = 1
+    visited[startx,starty] = 1
 
     while(length(q)) {
         ny = q[qs]["y"]
