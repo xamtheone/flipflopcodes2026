@@ -32,15 +32,15 @@ END {
     m = 800
 
     while(length(q)) {
-        ny = q[qs]["y"]
-        nx = q[qs]["x"]
-        l = q[qs]["length"]
-        last_dir = q[qs]["last_dir"]
-        next_to_portal = q[qs]["next_to_portal"]
+        ny = q[qe]["y"]
+        nx = q[qe]["x"]
+        l = q[qe]["length"]
+        last_dir = q[qe]["last_dir"]
+        next_to_portal = q[qe]["next_to_portal"]
 
         split("", this_visited, "")
-        for (y in q[qs]["visited"]) {
-            for (x in q[qs]["visited"][y]) {
+        for (y in q[qe]["visited"]) {
+            for (x in q[qe]["visited"][y]) {
                 this_visited[y][x] = 1
             }
         }
@@ -52,8 +52,8 @@ END {
         #     ancestors[a]["steps"] = q[qs]["ancestors"][a]["steps"]
         # }
         
-        delete q[qs]
-        qs++
+        delete q[qe]
+        qe--
 
         if (l >= m) continue
 
