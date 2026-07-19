@@ -1,9 +1,4 @@
 BEGIN {
-    LIMIT_16BIT = 2**16
-    NB_REGISTERS = 16
-    r = 0
-    for (i = 0; i < NB_REGISTERS; i++) REGISTERS[i] = 0
-
     print "#include <stdint.h>"
     print ""
     print "int main(void)"
